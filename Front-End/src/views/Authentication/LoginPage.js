@@ -15,6 +15,10 @@ import CryptoJS from "crypto-js";
 
 import axios from "axios";
 // import { withRouter } from 'react-router-dom';
+import { GoogleLogin, GoogleLogout } from "react-google-login";
+
+const clientId =
+  "632941047348-7mjkcjfq0124slatb1fdo3m6dgtfli38.apps.googleusercontent.com";
 
 function Login() {
   // React States
@@ -24,6 +28,25 @@ function Login() {
 
   // inside the component
   // const history = withRouter();
+
+  const centerStyles = {
+    display: "flex",
+    justifyContent: "center", // Center horizontally
+    alignItems: "center" // Center vertically
+  };
+
+  const onFailure = res => {
+    console.log("Login Failed! res: ", res);
+  };
+
+  const onSuccess = res => {
+    console.log("Login Succeeded! res: ", res);
+    this.props.history.push("/order-confirm");
+  };
+
+  const onLogoutSuccess = res => {
+    console.log("Logout Successful");
+  };
 
   const handleSubmit = event => {
     setIsLoading(true);
@@ -100,6 +123,20 @@ function Login() {
               Don't have an account?{" "}
               <Link to="/petowner-register">Register here</Link>
             </p>
+          </div>
+          <div>
+            <Row>
+              <Col style={centerStyles}>
+                <GoogleLogin
+                  clientId={clientId}
+                  buttonText="Continue With Google"
+                  onSuccess={onSuccess}
+                  onFaliure={onFailure}
+                  cookiePolicy={"single_host_origin"}
+                  issSignedIn={true}
+                ></GoogleLogin>
+              </Col>
+            </Row>
           </div>
         </div>
       </ListGroupItem>
